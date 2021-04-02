@@ -1,7 +1,15 @@
+import { useState } from 'react';
 import { Container, Menu, Grid, Icon, Label } from 'semantic-ui-react';
 import Link from 'next/link';
+import BasicModal from '../../Modal/BasicModal';
 
 export default function MenuWeb() {
+  const [showModal, setShowModal] = useState(false);
+
+  const onShowModal = () => {
+    setShowModal(true);
+  };
+
   return (
     <div className="menu">
       <Container>
@@ -10,9 +18,17 @@ export default function MenuWeb() {
             <MenuPlataforms />
           </Grid.Column>
           <Grid.Column className="menu__right" width={10}>
-            <MenuOptions />
+            <MenuOptions onShowModal={onShowModal} />
           </Grid.Column>
         </Grid>
+        <BasicModal
+          show={showModal}
+          setShow={setShowModal}
+          title="Sign in"
+          size="small"
+        >
+          <h2>Contenido de modal</h2>
+        </BasicModal>
       </Container>
     </div>
   );
@@ -34,10 +50,11 @@ const MenuPlataforms = () => {
   );
 };
 
-const MenuOptions = () => {
+const MenuOptions = (props) => {
+  const { onShowModal } = props;
   return (
     <Menu>
-      <Menu.Item>
+      <Menu.Item onClick={onShowModal}>
         <Icon name="user outline" />
         Mi cuenta
       </Menu.Item>
