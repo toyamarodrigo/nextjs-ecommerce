@@ -8,8 +8,7 @@ import { loginApi } from '../../../api/user';
 
 export default function LoginForm({ showRegisterForm, onCloseModal }) {
   const [loading, setLoading] = useState(false);
-  const auth = useAuth();
-  console.log(auth);
+  const { login } = useAuth();
 
   const formik = useFormik({
     initialValues: initialValues(),
@@ -17,15 +16,15 @@ export default function LoginForm({ showRegisterForm, onCloseModal }) {
     onSubmit: async (formData) => {
       setLoading(true);
       const response = await loginApi(formData);
-      console.log(response);
-      setLoading(false);
 
       if (response?.jwt) {
-        console.log('Login ok');
+        login(response.jwt);
+        toast.success('Log in successful');
         onCloseModal();
       } else {
         toast.error('Email or Password incorrect, please try again');
       }
+      setLoading(false);
     },
   });
 
