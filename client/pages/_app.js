@@ -1,14 +1,28 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import AuthContext from '../context/AuthContext';
 import jwtDecode from 'jwt-decode';
-import { setToken } from '../api/token';
+import { setToken, getToken } from '../api/token';
 import '../scss/global.scss';
 import 'semantic-ui-css/semantic.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function MyApp({ Component, pageProps }) {
   const [auth, setAuth] = useState(undefined);
+  const [reloadUser, setReloadUser] = useState(false);
+
+  useEffect(() => {
+    const token = getToken();
+    if (token) {
+      setAuth({
+        token,
+        idUser: jwtDecode(token).id,
+      });
+    } else {
+      setAuth(null);
+    }
+    setReloadUser(false)
+  }, [reloadUser]);
 
   // Login function from any component
   const login = (token) => {
@@ -24,13 +38,15 @@ export default function MyApp({ Component, pageProps }) {
   // useMemo will update only if data is different
   const authData = useMemo(
     () => ({
-      auth: { name: 'Rodri', email: 'rodri.toyama@gmail.com' },
+      auth,
       login,
       logout: () => null,
-      setRealoadUser: () => null,
+      setReloadUser,
     }),
-    []
+    [auth]
   );
+
+  if (auth === undefined) return null;
 
   return (
     <AuthContext.Provider value={authData}>
