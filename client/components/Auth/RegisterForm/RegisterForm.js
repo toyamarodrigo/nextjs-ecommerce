@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'semantic-ui-react';
-import { useFormik, yupToFormErrors } from 'formik';
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { registerApi } from '../../../api/user';
 import { toast } from 'react-toastify';
@@ -60,7 +60,7 @@ export default function RegisterForm({ showLoginForm }) {
         error={formik.errors.name}
       />
       <div className="actions">
-        <Button type="button" basic>
+        <Button type="button" basic onClick={showLoginForm}>
           Sign in
         </Button>
         <Button type="submit" className="submit" loading={loading}>
