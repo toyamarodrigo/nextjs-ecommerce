@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import BasicLayout from '../layouts/BasicLayout';
+import ChangeNameForm from '../components/Account/ChangeNameForm';
 import { useRouter } from 'next/router';
 import useAuth from '../hooks/useAuth';
 import { getMeApi } from '../api/user';
@@ -25,16 +26,18 @@ export default function account() {
 
   return (
     <BasicLayout className="account">
-      <Configuration />
+      <Configuration user={user} />
     </BasicLayout>
   );
 }
 
-const Configuration = () => {
+const Configuration = ({ user }) => {
   return (
     <div className="account__configuration">
       <div className="title">Configuration</div>
-      <div className="data">Form configuration</div>
+      <div className="data">
+        <ChangeNameForm user={user} />
+      </div>
     </div>
   );
 };
