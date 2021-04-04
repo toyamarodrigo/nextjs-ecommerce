@@ -1,18 +1,27 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'semantic-ui-react';
-import { Formik, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-import { updateNameApi } from '../../../api/user';
+import { updateEmailApi } from '../../../api/user';
 
 export default function ChangeEmailForm({ user, logout, setReloadUser }) {
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: initialValues(),
     validationSchema: Yup.object(validationSchema()),
-    onSubmit: (formData) => {
-      console.log(formData);
+    onSubmit: async (formData) => {
+      setLoading(true);
+      const response = await updateEmailApi(user.id, formData.email, logout);
+      if (!response || response?.statusCode === 400) {
+        toast.error('Error: Fail updating email');
+      } else {
+        setReloadUser(true);
+        toast.success('Email Updated successfuly');
+        formik.handleReset();
+      }
+      setLoading(false);
     },
   });
 
