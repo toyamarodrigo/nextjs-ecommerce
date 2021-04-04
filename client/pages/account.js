@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import BasicLayout from '../layouts/BasicLayout';
 import ChangeNameForm from '../components/Account/ChangeNameForm';
+import ChangeEmailForm from '../components/Account/ChangeEmailForm';
 import { useRouter } from 'next/router';
 import useAuth from '../hooks/useAuth';
 import { getMeApi } from '../api/user';
 
 export default function account() {
   const [user, setUser] = useState(undefined);
-  const { auth, logout } = useAuth();
+  const { auth, logout, setReloadUser } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -26,17 +27,30 @@ export default function account() {
 
   return (
     <BasicLayout className="account">
-      <Configuration user={user} />
+      <Configuration
+        user={user}
+        logout={logout}
+        setReloadUser={setReloadUser}
+      />
     </BasicLayout>
   );
 }
 
-const Configuration = ({ user }) => {
+const Configuration = ({ user, logout, setReloadUser }) => {
   return (
     <div className="account__configuration">
       <div className="title">Configuration</div>
       <div className="data">
-        <ChangeNameForm user={user} />
+        <ChangeNameForm
+          user={user}
+          logout={logout}
+          setReloadUser={setReloadUser}
+        />
+        <ChangeEmailForm
+          user={user}
+          logout={logout}
+          setReloadUser={setReloadUser}
+        />
       </div>
     </div>
   );
