@@ -10,11 +10,23 @@ export async function createAddressApi(address, logout) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(address),
-    },
-    const result = await authFetch(url, params);
+    };
+    const result = await authFetch(url, params, logout);
     return result;
   } catch (error) {
-    console.log(error)
-    return null
+    console.log(error);
+    return null;
+  }
+}
+
+export async function getAddressesApi(idUser, logout) {
+  try {
+    const url = `${BASE_PATH}/addresses?users_permissions_user=${idUser}`;
+    const result = await authFetch(url, null, logout);
+    if (result.statusCode === 500) throw 'Server Error';
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
   }
 }

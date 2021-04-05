@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Button } from 'semantic-ui-react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -33,7 +33,7 @@ export default function AddressForm({ setShowModal }) {
       formik.resetForm();
       setLoading(false);
       setShowModal(false);
-      toast.success('');
+      toast.success('Address created');
     }
 
     setLoading(false);

@@ -5,6 +5,7 @@ import ChangeNameForm from '../components/Account/ChangeNameForm';
 import ChangeEmailForm from '../components/Account/ChangeEmailForm';
 import ChangePasswordForm from '../components/Account/ChangePasswordForm';
 import AddressForm from '../components/Account/AddressForm';
+import AddressList from '../components/Account/AddressList';
 import { useRouter } from 'next/router';
 import useAuth from '../hooks/useAuth';
 import { getMeApi } from '../api/user';
@@ -80,7 +81,7 @@ const Addresses = () => {
         <Icon name="plus" link onClick={() => openModal('New Address')} />
       </div>
       <div className="data">
-        <p>Address list</p>
+        <AddressList />
       </div>
       <BasicModal show={showModal} setShow={setShowModal} title={titleModal}>
         {formModal}
