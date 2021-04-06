@@ -30,3 +30,39 @@ export async function getAddressesApi(idUser, logout) {
     return null;
   }
 }
+
+export async function deleteAddressesApi(idAddress, logout) {
+  try {
+    const url = `${BASE_PATH}/addresses/${idAddress}`;
+    const params = {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const result = await authFetch(url, params, logout);
+    if (result.statusCode === 500) throw 'Server Error';
+    return true;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function updateAddressesApi(idAddress, address, logout) {
+  try {
+    const url = `${BASE_PATH}/addresses/${idAddress}`;
+    const params = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(address),
+    };
+    const result = await authFetch(url, params, logout);
+    return result ? result : null;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}

@@ -3,18 +3,28 @@ import { Form, Button } from 'semantic-ui-react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import useAuth from '../../../hooks/useAuth';
-import { createAddressApi } from '../../../api/address';
+import { createAddressApi, updateAddressesApi } from '../../../api/address';
 import { toast } from 'react-toastify';
 
-export default function AddressForm({ setShowModal }) {
+export default function AddressForm({
+  setShowModal,
+  setReloadAddresses,
+  newAddress,
+  address,
+}) {
   const [loading, setLoading] = useState(false);
   const { auth, logout } = useAuth();
 
   const formik = useFormik({
-    initialValues: initialValues(),
+    initialValues: initialValues(address),
     validationSchema: Yup.object(validationSchema()),
     onSubmit: async (formData) => {
-      createAddress(formData);
+      if (newAddress) {
+        createAddress(formData);
+      } else {
+        console.log('Update address');
+        updateAddress(formData)
+      }
     },
   });
 
@@ -31,12 +41,33 @@ export default function AddressForm({ setShowModal }) {
       setLoading(false);
     } else {
       formik.resetForm();
+      setReloadAddresses(true);
       setLoading(false);
       setShowModal(false);
       toast.success('Address created');
     }
 
     setLoading(false);
+  };
+
+  const updateAddress = async (formData) => {
+    setLoading(true);
+    const formDataTemp = {
+      ...formData,
+      users_permissions_user: auth.idUser,
+    };
+    const response = await updateAddressesApi(address._id, formDataTemp, logout);
+
+    if (!response) {
+      toast.warning('Fail updating address');
+      setLoading(false);
+    } else {
+      formik.resetForm();
+      setReloadAddresses(true);
+      setLoading(false);
+      setShowModal(false);
+      toast.success('Address Updated');
+    }
   };
 
   return (
@@ -115,22 +146,22 @@ export default function AddressForm({ setShowModal }) {
       </Form.Group>
       <div className="actions">
         <Button className="submit" type="submit" loading={loading}>
-          Create Address
+          {newAddress ? 'Create Address' : 'Update Address'}
         </Button>
       </div>
     </Form>
   );
 }
 
-const initialValues = () => {
+const initialValues = (address) => {
   return {
-    title: '',
-    name: '',
-    address: '',
-    city: '',
-    state: '',
-    postalCode: '',
-    phone: '',
+    title: address?.title || '',
+    name: address?.name || '',
+    address: address?.address || '',
+    city: address?.city || '',
+    state: address?.state || '',
+    postalCode: address?.postalCode || '',
+    phone: address?.phone || '',
   };
 };
 

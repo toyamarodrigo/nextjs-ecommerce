@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Button } from 'semantic-ui-react';
 import { map, size } from 'lodash';
-import { getAddressesApi } from '../../../api/address';
+import { getAddressesApi, deleteAddressesApi } from '../../../api/address';
 import useAuth from '../../../hooks/useAuth';
 
-export default function AddressList() {
+export default function AddressList({
+  reloadAddresses,
+  setReloadAddresses,
+  openModal,
+}) {
   const [addresses, setAddresses] = useState(null);
   const { auth, logout } = useAuth();
 
@@ -12,8 +16,12 @@ export default function AddressList() {
     (async () => {
       const response = await getAddressesApi(auth.idUser, logout);
       setAddresses(response || []);
+      setReloadAddresses(false);
     })();
-  }, []);
+  }, [reloadAddresses]);
+
+  // We could use a Loading spinner
+  if (!addresses) return null;
 
   return (
     <div className="list-address">
@@ -23,7 +31,12 @@ export default function AddressList() {
         <Grid>
           {map(addresses, (address) => (
             <Grid.Column key={address.id} mobile={16} tablet={8} computer={4}>
-              <Address address={address} />
+              <Address
+                address={address}
+                logout={logout}
+                setReloadAddresses={setReloadAddresses}
+                openModal={openModal}
+              />
             </Grid.Column>
           ))}
         </Grid>
@@ -32,8 +45,16 @@ export default function AddressList() {
   );
 }
 
-const Address = ({ address }) => {
-  console.log(address);
+const Address = ({ address, logout, setReloadAddresses, openModal }) => {
+  const [loadingDelete, setLoadingDelete] = useState(false);
+
+  const deleteAddress = async () => {
+    setLoadingDelete(true);
+    const response = await deleteAddressesApi(address.id, logout);
+    if (response) setReloadAddresses(true);
+    setLoadingDelete(false);
+  };
+
   return (
     <div className="address">
       <p>{address.title}</p>
@@ -44,8 +65,15 @@ const Address = ({ address }) => {
       </p>
       <p>{address.phone}</p>
       <div className="actions">
-        <Button primary>Edit</Button>
-        <Button>Delete</Button>
+        <Button
+          primary
+          onClick={() => openModal(`Edit: ${address.title}`, address)}
+        >
+          Edit
+        </Button>
+        <Button onClick={deleteAddress} loading={loadingDelete}>
+          Delete
+        </Button>
       </div>
     </div>
   );
