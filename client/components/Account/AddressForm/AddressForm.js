@@ -22,7 +22,7 @@ export default function AddressForm({ setShowModal }) {
     setLoading(true);
     const formDataTemp = {
       ...formData,
-      user: auth.idUser,
+      users_permissions_user: auth.idUser,
     };
     const response = await createAddressApi(formDataTemp, logout);
 
