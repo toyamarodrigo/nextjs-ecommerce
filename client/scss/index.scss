@@ -4,6 +4,7 @@
 @import '../layouts/BasicLayout/BasicLayout.scss';
 
 // Pages
+@import '../pages/account.scss';
 @import '../pages/index.scss';
 
 // Components
@@ -17,6 +18,6 @@
 @import '../components/Account/ChangePasswordForm/ChangePasswordForm.scss';
 @import '../components/Account/AddressForm/AddressForm.scss';
 @import '../components/Account/AddressList/AddressList.scss';
+@import '../components/ListGames/ListGames.scss';
 
-// Pages
-@import '../pages/account.scss';
+
