@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Menu, Grid, Icon, Label } from 'semantic-ui-react';
 import Link from 'next/link';
+import { map } from 'lodash';
 import BasicModal from '../../Modal/BasicModal';
 import Auth from '../../Auth/Auth';
 import useAuth from '../../../hooks/useAuth';
 import { getMeApi } from '../../../api/user';
+import { getPlatformsApi } from '../../../api/platform';
 
 export default function MenuWeb() {
   const [showModal, setShowModal] = useState(false);
   const [titleModal, setTitleModal] = useState('Sign in');
   const [user, setUser] = useState(undefined);
+  const [platforms, setPlatforms] = useState([]);
   const { auth, logout } = useAuth();
 
   useEffect(() => {
@@ -19,6 +22,13 @@ export default function MenuWeb() {
     })();
   }, [auth]);
 
+  useEffect(() => {
+    (async () => {
+      const response = await getPlatformsApi();
+      setPlatforms(response || []);
+    })();
+  }, []);
+
   const onShowModal = () => setShowModal(true);
   const onCloseModal = () => setShowModal(false);
 
@@ -27,7 +37,7 @@ export default function MenuWeb() {
       <Container>
         <Grid>
           <Grid.Column className="menu__left" width={6}>
-            <MenuPlataforms />
+            <MenuPlataforms platforms={platforms} />
           </Grid.Column>
           <Grid.Column className="menu__right" width={10}>
             {user !== undefined && (
@@ -52,18 +62,16 @@ export default function MenuWeb() {
   );
 }
 
-const MenuPlataforms = () => {
+const MenuPlataforms = ({ platforms }) => {
   return (
     <Menu>
-      <Link href="/playstation">
-        <Menu.Item as="a">Playstation</Menu.Item>
-      </Link>
-      <Link href="/xbox">
-        <Menu.Item as="a">Xbox</Menu.Item>
-      </Link>
-      <Link href="/switch">
-        <Menu.Item as="a">Switch</Menu.Item>
-      </Link>
+      {map(platforms, (platform) => (
+        <Link href={`/games/${platform.url}`} key={platform._id}>
+          <Menu.Item as="a" name={platform.url}>
+            {platform.title}
+          </Menu.Item>
+        </Link>
+      ))}
     </Menu>
   );
 };
