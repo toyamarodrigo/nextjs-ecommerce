@@ -5,8 +5,9 @@ import BasicLayout from '../../layouts/BasicLayout';
 import { useRouter } from 'next/router';
 import { getGamesPlatformApi, getTotalGamesPlatformApi } from '../../api/game';
 import ListGames from '../../components/ListGames/ListGames';
+import Pagination from '../../components/Pagination/Pagination';
 
-const limitPerPage = 4;
+const limitPerPage = 2;
 
 export default function Platform() {
   const [games, setGames] = useState(null);
@@ -25,7 +26,7 @@ export default function Platform() {
         const response = await getGamesPlatformApi(
           query.platforms,
           limitPerPage,
-          0
+          getStartItem()
         );
         setGames(response);
       }
@@ -48,6 +49,14 @@ export default function Platform() {
         </div>
       )}
       {size(games) > 0 && <ListGames games={games} />}
+
+      {totalGames ? (
+        <Pagination
+          totalGames={totalGames}
+          page={query.page ? parseInt(query.page) : 1}
+          limitPerPage={limitPerPage}
+        />
+      ) : null}
     </BasicLayout>
   );
 }
