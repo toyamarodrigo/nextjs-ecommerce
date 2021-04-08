@@ -3,14 +3,21 @@ import { Loader } from 'semantic-ui-react';
 import { map, size } from 'lodash';
 import BasicLayout from '../../layouts/BasicLayout';
 import { useRouter } from 'next/router';
-import { getGamesPlatformApi } from '../../api/game';
+import { getGamesPlatformApi, getTotalGamesPlatformApi } from '../../api/game';
 import ListGames from '../../components/ListGames/ListGames';
 
 const limitPerPage = 4;
 
 export default function Platform() {
   const [games, setGames] = useState(null);
+  const [totalGames, setTotalGames] = useState(null);
   const { query } = useRouter();
+
+  const getStartItem = () => {
+    const currentPage = parseInt(query.page);
+    if (!query.page || currentPage === 1) return 0;
+    else return currentPage * limitPerPage - limitPerPage;
+  };
 
   useEffect(() => {
     (async () => {
@@ -22,6 +29,13 @@ export default function Platform() {
         );
         setGames(response);
       }
+    })();
+  }, [query]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await getTotalGamesPlatformApi(query.platforms);
+      setTotalGames(response);
     })();
   }, [query]);
 
