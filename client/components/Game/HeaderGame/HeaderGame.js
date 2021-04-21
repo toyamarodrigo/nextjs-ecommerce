@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Grid, Image, Icon, Button } from 'semantic-ui-react';
 import classNames from 'classnames';
 import { size } from 'lodash';
-import { isFavoriteApi } from '../../../api/favorite';
+import {
+  isFavoriteApi,
+  addFavoriteApi,
+  deleteFavoriteApi,
+} from '../../../api/favorite';
 import useAuth from '../../../hooks/useAuth';
 import { authFetch } from '../../../utils/fetch';
 
@@ -21,6 +25,7 @@ export default function HeaderGame({ game, game: { title, poster } }) {
 
 const Info = ({ game, game: { title, summary, price, discount } }) => {
   const [isFavorite, setIsFavorite] = useState(false);
+  const [reloadFavorite, setReloadFavorite] = useState(false);
   const { auth, logout } = useAuth();
 
   useEffect(() => {
@@ -29,15 +34,22 @@ const Info = ({ game, game: { title, summary, price, discount } }) => {
       if (size(response) > 0) setIsFavorite(true);
       else setIsFavorite(false);
     })();
-  }, [game]);
+    setReloadFavorite(false);
+  }, [game, reloadFavorite]);
 
-  const addFavorite = () => {
-    console.log("Anadir a favoritos")
-  }
+  const addFavorite = async () => {
+    if (auth) {
+      await addFavoriteApi(auth.idUser, game.id, logout);
+      setReloadFavorite(true);
+    }
+  };
 
-  const removeFavorite = () => {
-    console.log("Eliminando de favoritos")
-  }
+  const removeFavorite = async () => {
+    if (auth) {
+      await deleteFavoriteApi(auth.idUser, game.id, logout);
+      setReloadFavorite(true);
+    }
+  };
 
   return (
     <>
@@ -62,7 +74,7 @@ const Info = ({ game, game: { title, summary, price, discount } }) => {
           <p>Precio de venta al publico: ${price}</p>
           <div className="header-game__buy-price-actions">
             <p>-{discount}%</p>
-            <p>${price - Math.floor(price * discount) / 100}</p>
+            <p>${(price - Math.floor(price * discount) / 100).toFixed(2)}</p>
           </div>
         </div>
         <Button className="header-game__buy-btn">Comprar</Button>
