@@ -5,6 +5,7 @@ import { map } from 'lodash';
 import BasicModal from '../../Modal/BasicModal';
 import Auth from '../../Auth/Auth';
 import useAuth from '../../../hooks/useAuth';
+import useCart from '../../../hooks/useCart';
 import { getMeApi } from '../../../api/user';
 import { getPlatformsApi } from '../../../api/platform';
 
@@ -77,6 +78,7 @@ const MenuPlataforms = ({ platforms }) => {
 };
 
 const MenuOptions = ({ onShowModal, user, logout }) => {
+  const { productsCart } = useCart();
   return (
     <Menu>
       {user ? (
@@ -102,6 +104,9 @@ const MenuOptions = ({ onShowModal, user, logout }) => {
           <Link href="/cart">
             <Menu.Item as="a" className="m-0">
               <Icon name="cart" />
+              <Label color="red" floating circular>
+                {productsCart}
+              </Label>
             </Menu.Item>
           </Link>
 
