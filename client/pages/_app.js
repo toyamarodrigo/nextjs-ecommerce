@@ -1,10 +1,12 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import AuthContext from '../context/AuthContext';
 import CartContext from '../context/CartContext';
 import jwtDecode from 'jwt-decode';
 import { useRouter } from 'next/router';
 import { setToken, getToken, removeToken } from '../api/token';
+import { getProductsCart, addProductCart } from '../api/cart';
+
 import '../scss/global.scss';
 import 'semantic-ui-css/semantic.min.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -59,11 +61,20 @@ export default function MyApp({ Component, pageProps }) {
     [auth]
   );
 
+  const addProduct = (product) => {
+    const token = getToken();
+    if (token) {
+      addProductCart(product);
+    } else {
+      toast.warning('You need to sign in before buying a game');
+    }
+  };
+
   const cartData = useMemo(
     () => ({
       productsCart: 0,
-      addProductCart: () => null,
-      getProductsCart: () => null,
+      addProductCart: (product) => addProduct(product),
+      getProductsCart: getProductsCart,
       removeProductCart: () => null,
       removeAllProductsCart: () => null,
     }),
