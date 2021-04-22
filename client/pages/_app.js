@@ -9,6 +9,7 @@ import {
   getProductsCart,
   addProductCart,
   countProductsCart,
+  removeProductCart
 } from '../api/cart';
 
 import '../scss/global.scss';
@@ -82,12 +83,17 @@ export default function MyApp({ Component, pageProps }) {
     }
   };
 
+  const removeProduct = (product) => {
+    removeProductCart(product)
+    setReloadCart(true);
+  }
+
   const cartData = useMemo(
     () => ({
       productsCart: totalProductCart,
       addProductCart: (product) => addProduct(product),
       getProductsCart: getProductsCart,
-      removeProductCart: () => null,
+      removeProductCart: (product) => removeProduct(product),
       removeAllProductsCart: () => null,
     }),
     [totalProductCart]
