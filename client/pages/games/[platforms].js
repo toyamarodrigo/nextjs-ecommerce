@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import { getGamesPlatformApi, getTotalGamesPlatformApi } from '../../api/game';
 import ListGames from '../../components/ListGames/ListGames';
 import Pagination from '../../components/Pagination/Pagination';
+import Seo from '../../components/Seo'
 
 const limitPerPage = 2;
 
@@ -42,6 +43,7 @@ export default function Platform() {
 
   return (
     <BasicLayout className="platforms">
+      <Seo title={query.query} />
       {!games && <Loader active>Loading games...</Loader>}
       {games && size(games) === 0 && (
         <div>

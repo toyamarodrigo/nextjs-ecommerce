@@ -41,8 +41,6 @@ module.exports = {
       createOrder.push(entry);
     }
 
-    console.log(createOrder);
-
     return createOrder;
   },
 };

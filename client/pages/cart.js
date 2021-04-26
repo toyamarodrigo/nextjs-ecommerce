@@ -5,6 +5,7 @@ import useCart from '../hooks/useCart';
 import SummaryCart from '../components/Cart/SummaryCart';
 import ShippingAddress from '../components/Cart/ShippingAddress';
 import Payment from '../components/Cart/Payment';
+import Seo from '../components/Seo';
 
 export default function cart() {
   const { getProductsCart } = useCart();
@@ -16,6 +17,7 @@ export default function cart() {
 function EmptyCart() {
   return (
     <BasicLayout className="empty-cart">
+      <Seo title="Empty Cart" />
       <h2>No games in cart</h2>
     </BasicLayout>
   );
@@ -40,6 +42,7 @@ function FullCart({ products }) {
 
   return (
     <BasicLayout className="full-cart">
+      <Seo title="My Cart" />
       <SummaryCart
         products={productsData}
         reloadCart={reloadCart}

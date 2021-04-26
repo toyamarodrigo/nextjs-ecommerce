@@ -4,10 +4,10 @@ import { Loader } from 'semantic-ui-react';
 import { getLastGamesApi } from '../api/game';
 import BasicLayout from '../layouts/BasicLayout/BasicLayout';
 import ListGames from '../components/ListGames/ListGames';
+import Seo from '../components/Seo';
 
 export default function Home() {
   const [games, setGames] = useState(null);
-  console.log(games);
 
   useEffect(() => {
     (async () => {
@@ -22,6 +22,7 @@ export default function Home() {
 
   return (
     <BasicLayout>
+      <Seo />
       {!games && <Loader active>Loading games</Loader>}
       {games && size(games) === 0 && (
         <div>

@@ -5,6 +5,7 @@ import { size, forEach } from 'lodash';
 import { getFavoriteApi } from '../api/favorite';
 import ListGames from '../components/ListGames';
 import useAuth from '../hooks/useAuth';
+import Seo from '../components/Seo';
 
 export default function wishlist() {
   const [games, setGames] = useState(null);
@@ -27,6 +28,7 @@ export default function wishlist() {
 
   return (
     <BasicLayout className="wishlist">
+      <Seo title="Wishlist" />
       <div className="wishlist__block">
         <div className="title">Wishlist</div>
         <div className="data">

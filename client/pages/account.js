@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import useAuth from '../hooks/useAuth';
 import { getMeApi } from '../api/user';
 import BasicModal from '../components/Modal/BasicModal';
+import Seo from '../components/Seo';
 
 export default function account() {
   const [user, setUser] = useState(undefined);
@@ -32,6 +33,7 @@ export default function account() {
 
   return (
     <BasicLayout className="account">
+      <Seo title="My Account" />
       <Configuration
         user={user}
         logout={logout}

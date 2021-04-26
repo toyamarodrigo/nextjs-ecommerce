@@ -5,6 +5,7 @@ import BasicLayout from '../layouts/BasicLayout';
 import { getOrdersApi } from '../api/order';
 import useAuth from '../hooks/useAuth';
 import Order from '../components/Orders/Order';
+import Seo from '../components/Seo';
 
 export default function orders() {
   const [orders, setOrders] = useState(null);
@@ -19,6 +20,7 @@ export default function orders() {
 
   return (
     <BasicLayout className="orders">
+      <Seo title="My Orders" description="Order list"/>
       <div className="orders__block">
         <div className="title">My Orders</div>
         <div className="data">

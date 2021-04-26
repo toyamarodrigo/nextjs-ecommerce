@@ -9,7 +9,6 @@ import {
 } from '../../../api/favorite';
 import useAuth from '../../../hooks/useAuth';
 import useCart from '../../../hooks/useCart';
-import { authFetch } from '../../../utils/fetch';
 
 export default function HeaderGame({ game, game: { title, poster } }) {
   return (

@@ -73,9 +73,6 @@ export async function paymentCartApi(token, products, idUser, address, logout) {
 
     const result = await authFetch(url, params, logout);
 
-    console.log('result');
-    console.log(result);
-
     return result;
   } catch (error) {
     console.log(error);

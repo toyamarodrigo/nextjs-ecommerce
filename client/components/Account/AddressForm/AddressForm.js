@@ -22,7 +22,6 @@ export default function AddressForm({
       if (newAddress) {
         createAddress(formData);
       } else {
-        console.log('Update address');
         updateAddress(formData)
       }
     },
