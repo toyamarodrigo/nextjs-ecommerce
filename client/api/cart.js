@@ -1,5 +1,6 @@
 import { toast } from 'react-toastify';
 import { size, includes, remove } from 'lodash';
+import { authFetch } from '../utils/fetch';
 import { BASE_PATH, CART } from '../utils/constants';
 
 export function getProductsCart() {
@@ -51,5 +52,33 @@ export function removeProductCart(product) {
     localStorage.setItem(CART, cart);
   } else {
     localStorage.removeItem(CART);
+  }
+}
+
+export async function paymentCartApi(token, products, idUser, address, logout) {
+  try {
+    const shippingAddress = address;
+    delete shippingAddress.user_permissions_user;
+    delete shippingAddress.createdAt;
+
+    const url = `${BASE_PATH}/orders`;
+
+    const params = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token, products, idUser, shippingAddress }),
+    };
+
+    const result = await authFetch(url, params, logout);
+
+    console.log('result');
+    console.log(result);
+
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
   }
 }
