@@ -28,7 +28,7 @@ module.exports = {
     for await (const product of products) {
       const data = {
         game: product.id,
-        user: idUser,
+        users_permissions_user: idUser,
         totalPayment,
         idPayment: charge.id,
         shippingAddress,
@@ -40,6 +40,8 @@ module.exports = {
       const entry = await strapi.query("order").create(validData);
       createOrder.push(entry);
     }
+
+    console.log(createOrder);
 
     return createOrder;
   },

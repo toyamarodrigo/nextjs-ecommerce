@@ -29,9 +29,6 @@ export default function FormPayment({ products, address }) {
       toast.error(result.error.message);
     } else {
 
-      console.log("products")
-      console.log(products)
-
       const response = await paymentCartApi(
         result.token,
         products,
@@ -39,8 +36,6 @@ export default function FormPayment({ products, address }) {
         address,
         logout
       );
-
-      console.log(response);
 
       if(size(response) > 0) {
         toast.success("Order completed")

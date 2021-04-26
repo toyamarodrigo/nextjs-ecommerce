@@ -58,7 +58,7 @@ export function removeProductCart(product) {
 export async function paymentCartApi(token, products, idUser, address, logout) {
   try {
     const shippingAddress = address;
-    delete shippingAddress.user_permissions_user;
+    delete shippingAddress.users_permissions_user;
     delete shippingAddress.createdAt;
 
     const url = `${BASE_PATH}/orders`;
