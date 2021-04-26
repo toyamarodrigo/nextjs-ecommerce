@@ -13,6 +13,8 @@ export default function FormPayment({ products, address }) {
   const stripe = useStripe();
   const elements = useElements();
   const { auth, logout } = useAuth();
+  const {removeAllProductsCart} = useCart();
+  const router = useRouter();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -42,6 +44,8 @@ export default function FormPayment({ products, address }) {
 
       if(size(response) > 0) {
         toast.success("Order completed")
+        removeAllProductsCart();
+        router.push("/orders")
       } else {
         toast.error("Order failed")
       }

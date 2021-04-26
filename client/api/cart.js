@@ -82,3 +82,12 @@ export async function paymentCartApi(token, products, idUser, address, logout) {
     return null;
   }
 }
+
+export function removeAllProductsCart() {
+  try {
+    localStorage.removeItem(CART);
+  } catch (error) {
+    console.log(error);
+    return null
+  }
+}
